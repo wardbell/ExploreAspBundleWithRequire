@@ -6,11 +6,14 @@ namespace ExploreAspBundleWithRequire
     {
         public static void RegisterBundles(BundleCollection bundles)
         {
+            // All application JS files
             bundles.Add(new ScriptBundle("~/bundles/app").Include(
                         "~/Scripts/app/*.js"));
 
+            // jQuery + a custom jQuery extension (made up for this example)
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/lib/jquery-1.*"));
+                        "~/Scripts/lib/jquery-1.*",
+                        "~/Scripts/lib/jquery.some-extension.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/lib/modernizr-*"));

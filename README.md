@@ -2,7 +2,7 @@
 
 This solution explores the use of VS 2012 ASP script bundling when applied to JavaScript files that rely on [**require.js**](http://requirejs.org/) for modularity.
 
-It demonstrates *one* way (not necessarily *the* way) to optimize loading of many AMD/require.js scripts by bundling them into a single downloaded script.
+It demonstrates *one* way (not necessarily *the* way) to optimize loading of many *AMD/require.js* scripts by bundling them into a single downloaded script.
 
 We are not using *r.js* to bundle these modules. That would be the typical *require.js* approach. But it requires installation of *node.js* and we haven't had much luck making it work. That's probably our fault ... although the complexities and opportunities for failure seem daunting.
 
@@ -31,11 +31,11 @@ The application scripts are in "Scripts/app". Each script follows the same patte
 
 This is standard *require.js* module definition practice except for step #1, the module name. Normally you omit the name parameter and let *require.js* define it based on the script's file name. 
 
-But after bundling, the files will be combined into a single file (e.g., "app?v=..."). The require.js would not be able to find the files that correspond to the modules. 
+But after bundling, the files will be combined into a single file (e.g., "app?v=..."). The *require.js* would not be able to find the files that correspond to the modules. 
 
 We relieve *require.js* of the necessity of loading files and correlating file names to module names by (a) specifying the module names explicitly and (b) playing the bundled script *before* invoking any application module function. 
 
-We won't be using require's async loading feature (the 'A' in "AMD") but we'll still benefit from its dependency management. For example, we won't have to worry about listing the scripts in a particular order.
+We won't be using *require*'s async loading feature (the 'A' in "AMD") but we'll still benefit from its dependency management. For example, we won't have to worry about listing the scripts in a particular order.
 
 When you tour the app scripts (which are deliberately simple ... usually only a few lines), you'll see a variety of dependency patterns. Notice that the bundle combines the files in alphabetical order; the application would fail if we weren't using *require* and we played these scripts in alphabetical order; the *presenter* script, for example is needed by all of the scripts that precede it.
 
@@ -54,9 +54,17 @@ There are no circular dependencies in this example solution. We try to avoid the
 I don't believe they would present a problem in our approach to bundling of AMD/require.js modules but the proof of that lies in the future.
 
 ## Incorporating non-AMD scripts ##
-Application scripts can depend upon 3rd party libraries that do not conform to AMD/require.js.
+Application scripts can depend upon 3rd party libraries that do not conform to *AMD/require.js*.
 
-Require.js has a "shim" configuration to cope with such dependencies. This example does not yet have an example of a shimmed library ... as it should.
+*Require.js* has a "shim" configuration to cope with such dependencies. 
+
+We demonstrate this feature with a fake JQuery extension, *Scripts/lib/jquery.some-extension.js*. At runtime, it expects to find a *jQuery* object in the global namespace (*window*) and plugs its extension method (*someExtensionForTestPurposes*) into this jQuery object. 
+
+This extension script is added to the jQuery bundle in *BundleConfig.cs*.
+
+It is not aware of AMD or *require.js*. We added shim code in *main.js* to tell *require.js* about this extension. We also include it in the *main.js* dependencies (see the dependency array in the *require* method call).
+
+Declaring the dependency in this manner would be necessary if we were expecting require to find and load the extension dynamically. We don't need that feature in this example because the HTML page plays our jQuery extension script for us. But we leave it here in case we decide to revert to the unbundled asynchronous script loading for which *require.js* is justly known. 
 
 ## Revert to unbundled ##
 

@@ -144,6 +144,7 @@
     <Content Include="Scripts\app\config.js" />
     <Content Include="Scripts\app\script-D.js" />
     <Content Include="Scripts\app\presenter.js" />
+    <Content Include="Scripts\lib\jquery.some-extension.js" />
     <Content Include="Scripts\main.js" />
     <Content Include="Scripts\app\b.1.js" />
     <Content Include="Scripts\app\c.js" />
